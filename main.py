@@ -7,26 +7,74 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import QTimer
 import sys 
+import os
+import json
+from PyQt5.QtWidgets import QDialog, QMessageBox
+from PyQt5.uic import loadUi
+from PyQt5.QtWidgets import QDialog, QMessageBox
+from PyQt5.uic import loadUi
 
 class LoginUI(QDialog):
     def __init__(self):
         super(LoginUI,self).__init__()
         loadUi("./UI/login.ui",self)
 
-        # This is example of changing screen
-        self.loginButton.clicked.connect(self.go_main_menu)
+        self.loginButton.clicked.connect(self.login)
+        self.signUpButton.clicked.connect(self.signUp)
+
+    def get_user_data(self):
+        if not os.path.exists('users.json'):
+            # create the JSON file
+            with open('users.json', 'w') as f:
+                initial_data = {"users": []}
+                json.dump(initial_data, f)
+
+        with open('users.json', 'r') as f:
+            user_data = json.load(f)
+            if "users" not in user_data:
+                user_data["users"] = []
+        return user_data
 
     def go_main_menu(self):
         main_menu = MainMenuUI()
         widget.addWidget(main_menu)
         widget.setCurrentIndex(widget.currentIndex()+1)
-    
-    def login():
-        pass
-    
-    def signUp():
-        pass
 
+    def login(self):
+
+        email = self.emailLabel.text()
+        user_data = self.get_user_data()
+
+        # Check if user inputted email exists in the stored data
+        if any(email == user['email'] for user in user_data['users']):
+            self.go_main_menu()
+        else:
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Critical)
+            error_dialog.setText("Invalid email.")
+            error_dialog.setWindowTitle("Error")
+            error_dialog.exec_()
+
+    def signUp(self):
+
+        name = self.nameInputSignUp.text()
+        email = self.emailInputSignUp.text()
+        user_data = self.get_user_data()
+
+        # Check if email already exists in the JSON file
+        if any(email == user['email'] for user in user_data['users']):
+            error_dialog = QMessageBox()
+            error_dialog.setIcon(QMessageBox.Critical)
+            error_dialog.setText("Email already exists.")
+            error_dialog.setWindowTitle("Error")
+            error_dialog.exec_()
+        else:
+            # Save new user data to JSON file
+            user_data['users'].append({'name': name, 'email': email})
+            with open('users.json', 'w') as f:
+                json.dump(user_data, f)
+
+            self.go_main_menu()
 
 class MainMenuUI(QDialog):
     def __init__(self):
@@ -57,8 +105,6 @@ class MainMenuUI(QDialog):
         pass
     def calculate_total_tracked_time():
         pass
-    
-    
     
 
 class PomodoroUI(QDialog):
@@ -185,7 +231,7 @@ class LongBreakUI(QDialog):
         self.done(2)
 
 app = QApplication(sys.argv)
-UI = LongBreakUI() # This line determines which screen you will load at first
+UI = LoginUI() # This line determines which screen you will load at first
 
 # You can also try one of other screens to see them.
     # UI = MainMenuUI()

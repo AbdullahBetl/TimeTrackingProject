@@ -130,6 +130,7 @@ color:rgb(255, 255, 255);</string>
        <font>
         <family>Chalkboard</family>
         <pointsize>12</pointsize>
+        <weight>50</weight>
         <bold>false</bold>
         <underline>false</underline>
        </font>
@@ -156,7 +157,7 @@ color:rgb(255, 255, 255);</string>
       <property name="styleSheet">
        <string notr="true"/>
       </property>
-     <item>
+      <item>
        <property name="text">
         <string>Select Project</string>
        </property>
@@ -217,6 +218,7 @@ color:rgb(255, 255, 255);</string>
        <font>
         <family>Chalkboard</family>
         <pointsize>12</pointsize>
+        <weight>50</weight>
         <bold>false</bold>
         <underline>false</underline>
        </font>
@@ -243,7 +245,6 @@ color:rgb(255, 255, 255);</string>
       <property name="styleSheet">
        <string notr="true"/>
       </property>
-      
      </widget>
     </widget>
     <widget class="QWidget" name="recipientsWidget" native="true">
@@ -300,6 +301,7 @@ color:rgb(255, 255, 255);</string>
        <font>
         <family>Chalkboard</family>
         <pointsize>13</pointsize>
+        <weight>50</weight>
         <bold>false</bold>
         <underline>false</underline>
        </font>
@@ -470,6 +472,7 @@ border-radius:30px;
        <font>
         <family>Chalkboard</family>
         <pointsize>13</pointsize>
+        <weight>50</weight>
         <bold>false</bold>
         <underline>false</underline>
        </font>
@@ -582,6 +585,7 @@ border-radius:20px;
        <font>
         <family>Chalkboard</family>
         <pointsize>12</pointsize>
+        <weight>50</weight>
         <bold>false</bold>
         <underline>false</underline>
        </font>
@@ -627,6 +631,7 @@ border-radius:20px;
        <font>
         <family>Chalkboard</family>
         <pointsize>12</pointsize>
+        <weight>50</weight>
         <bold>false</bold>
         <underline>false</underline>
        </font>
@@ -677,7 +682,6 @@ color:rgb(255, 255, 255);</string>
       <property name="styleSheet">
        <string notr="true"/>
       </property>
-     
      </widget>
     </widget>
     <widget class="QWidget" name="addSubjectWidget" native="true">
@@ -846,7 +850,6 @@ border-radius:40px;
         <string>All</string>
        </property>
       </item>
-      
      </widget>
      <widget class="QLabel" name="showSummaryProjectText">
       <property name="geometry">
@@ -861,6 +864,7 @@ border-radius:40px;
        <font>
         <family>Chalkboard</family>
         <pointsize>11</pointsize>
+        <weight>50</weight>
         <bold>false</bold>
         <underline>false</underline>
        </font>
@@ -1057,6 +1061,9 @@ border-radius:0px;
 </string>
      </property>
      <widget class="QTableWidget" name="summaryTableValuesWidget">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -1069,9 +1076,16 @@ border-radius:0px;
        <font>
         <family>Chalkboard</family>
         <pointsize>13</pointsize>
+        <weight>50</weight>
         <italic>false</italic>
         <bold>false</bold>
        </font>
+      </property>
+      <property name="cursor" stdset="0">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
       </property>
       <property name="styleSheet">
        <string notr="true">background-color:rgba(88, 128, 63, 128);
@@ -1087,27 +1101,51 @@ text-align: center;</string>
       <property name="alternatingRowColors">
        <bool>false</bool>
       </property>
+      <property name="showGrid">
+       <bool>true</bool>
+      </property>
       <property name="gridStyle">
        <enum>Qt::DotLine</enum>
+      </property>
+      <property name="sortingEnabled">
+       <bool>false</bool>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
       </property>
-      <attribute name="horizontalHeaderMinimumSectionSize">
-       <number>20</number>
+      <attribute name="horizontalHeaderVisible">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="horizontalHeaderCascadingSectionResizes">
+       <bool>true</bool>
       </attribute>
       <attribute name="horizontalHeaderDefaultSectionSize">
        <number>106</number>
       </attribute>
+      <attribute name="horizontalHeaderMinimumSectionSize">
+       <number>18</number>
+      </attribute>
+      <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="horizontalHeaderStretchLastSection">
+       <bool>true</bool>
+      </attribute>
       <attribute name="verticalHeaderCascadingSectionResizes">
        <bool>false</bool>
+      </attribute>
+      <attribute name="verticalHeaderDefaultSectionSize">
+       <number>36</number>
       </attribute>
       <attribute name="verticalHeaderMinimumSectionSize">
        <number>25</number>
       </attribute>
-      <attribute name="verticalHeaderDefaultSectionSize">
-       <number>36</number>
-      </attribute> 
+      <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="verticalHeaderStretchLastSection">
+       <bool>false</bool>
+      </attribute>
       <column>
        <property name="text">
         <string>Date</string>
@@ -1117,13 +1155,21 @@ text-align: center;</string>
          <family>Chalkboard</family>
         </font>
        </property>
-         
        <property name="background">
         <color>
-         <red>0</red>
+         <red>85</red>
          <green>0</green>
          <blue>0</blue>
         </color>
+       </property>
+       <property name="foreground">
+        <brush brushstyle="NoBrush">
+         <color alpha="255">
+          <red>85</red>
+          <green>85</green>
+          <blue>0</blue>
+         </color>
+        </brush>
        </property>
       </column>
       <column>
@@ -1137,27 +1183,49 @@ text-align: center;</string>
        </property>
        <property name="background">
         <color>
-         <red>0</red>
+         <red>85</red>
          <green>0</green>
          <blue>0</blue>
         </color>
+       </property>
+       <property name="foreground">
+        <brush brushstyle="NoBrush">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
        </property>
       </column>
       <column>
        <property name="text">
         <string>End Time</string>
        </property>
+       <property name="whatsThis">
+        <string/>
+       </property>
        <property name="font">
         <font>
          <family>Chalkboard</family>
+         <italic>false</italic>
         </font>
        </property>
        <property name="background">
         <color>
-         <red>0</red>
+         <red>85</red>
          <green>0</green>
          <blue>0</blue>
         </color>
+       </property>
+       <property name="foreground">
+        <brush brushstyle="NoBrush">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
        </property>
       </column>
       <column>
@@ -1171,10 +1239,19 @@ text-align: center;</string>
        </property>
        <property name="background">
         <color>
-         <red>0</red>
+         <red>85</red>
          <green>0</green>
          <blue>0</blue>
         </color>
+       </property>
+       <property name="foreground">
+        <brush brushstyle="NoBrush">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
        </property>
       </column>
       <column>
@@ -1188,10 +1265,19 @@ text-align: center;</string>
        </property>
        <property name="background">
         <color>
-         <red>0</red>
+         <red>85</red>
          <green>0</green>
          <blue>0</blue>
         </color>
+       </property>
+       <property name="foreground">
+        <brush brushstyle="NoBrush">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
        </property>
       </column>
      </widget>

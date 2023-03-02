@@ -123,6 +123,7 @@ class MainMenuUI(QDialog):
         self.showSummaryButton.clicked.connect(self.show_summary)
         self.sendEmailThisSummaryButton.clicked.connect(self.send_email)
         self.total_tracked_time = self.totalTrackedTimeDurationLabel
+        self.total_tracked_time.setText("00:00")
         self.errorTextRecipientsEmailLabel.setText("")
         self.error_subject_input.setText("")
         self.error_project_input.setText("")
@@ -282,19 +283,34 @@ class MainMenuUI(QDialog):
 
     def show_summary(self):
         c = 0
-
+        total_hr=0
+        total_min=0
         self.data = read_file()
         projects = self.data[user.email]['projects'].keys()
-        print(projects)
+        
         for i in projects:
             subjects = self.data[user.email]['projects'][i].keys()
-            print(subjects)
+            
             for j in subjects:
                 sessions = self.data[user.email]['projects'][i][j].keys()
                 for k in sessions:
                  date = self.data[user.email]['projects'][i][j][k]['date']
                  start = self.data[user.email]['projects'][i][j][k]['start']
                  end = self.data[user.email]['projects'][i][j][k]['end']
+                 success_task = self.data[user.email]['projects'][i][j][k]['tasks']['success']
+                 success_task = ','.join(success_task)
+                 fail_task = self.data[user.email]['projects'][i][j][k]['tasks']['fail']
+                 fail_task = ','.join(fail_task)
+                 
+                 calc_start = start.split(':')
+                 calc_end = end.split(':')
+                 calc_hr =   int(calc_end[0]) - int(calc_start[0])
+                 calc_min = int(calc_end[1]) - int(calc_start[1])
+                 
+                 total_hr += calc_hr
+                 total_min += calc_min
+                 
+                 
                  rowPosition = self.summaryTableValuesWidget.rowCount()
                  self.summaryTableValuesWidget.insertRow(c)
                  self.summaryTableValuesWidget.setItem(
@@ -303,14 +319,27 @@ class MainMenuUI(QDialog):
                      rowPosition, 1, QTableWidgetItem(start))
                  self.summaryTableValuesWidget.setItem(
                      rowPosition, 2, QTableWidgetItem(end))
+                 if success_task != "":
+                  self.summaryTableValuesWidget.setItem(
+                     rowPosition, 3, QTableWidgetItem(str(success_task)))
+                 else:
+                     self.summaryTableValuesWidget.setItem(
+                         rowPosition, 3, QTableWidgetItem('None'))
+                 if fail_task!="":
+                  self.summaryTableValuesWidget.setItem(
+                     rowPosition, 4, QTableWidgetItem(str(fail_task)))
+                 else:
+                     self.summaryTableValuesWidget.setItem(
+                         rowPosition, 4, QTableWidgetItem('None'))
                  c += 1
-                 print(date)
+                 
+                 
+        self.total_tracked_time.setText(str(total_hr)+':'+str(total_min))
+
 
     def send_email():
         pass
 
-    def calculate_total_tracked_time():
-        pass
 
 
 class PomodoroUI(QDialog):
@@ -339,7 +368,7 @@ class PomodoroUI(QDialog):
         self.current_time = now.strftime("%H:%M")
         self.data = read_file()
         self.data[user.email]['projects'][self.project_name][self.subject_name]['session' +
-                                                                                str(session_number)] = {'date': str(self.today), 'start': str(self.current_time), 'end': '', 'tasks': {}}
+                                                                                str(session_number)] = {'date': str(self.today), 'start': str(self.current_time), 'end': '', 'tasks': {'success':[],'fail':[]}}
         self.data.update()
         write_file(self.data)
 
@@ -353,9 +382,17 @@ class PomodoroUI(QDialog):
         if self.task == "":
             pass
         else:
+            
             self.data = read_file()
-            self.data[user.email]['projects'][self.project_name][self.subject_name]['session' +
-                                                                                    str(session_number)]['tasks'] = {self.task: "Success"}
+            
+            check_task =self.data[user.email]['projects'][self.project_name][self.subject_name]['session' +
+                                                                                    str(session_number)]['tasks']['success']
+            if check_task =="":
+                self.data[user.email]['projects'][self.project_name][self.subject_name]['session' +
+                                                                                        str(session_number)]['tasks']['success']=[self.task]
+            else:
+                self.data[user.email]['projects'][self.project_name][self.subject_name]['session' +
+                                                                                        str(session_number)]['tasks']['success'].append(self.task)
             self.data.update()
             write_file(self.data)
             self.tasksCombo.addItem(self.task)
@@ -393,10 +430,18 @@ class PomodoroUI(QDialog):
             widget.setCurrentIndex(widget.currentIndex()+1)
 
     def accomplished_task(self):
-        unfinished_task = self.tasksCombo_2.currentText()
+        self.unfinished_task = self.tasksCombo_2.currentText()
         self.data = read_file()
+        check_task =self.data[user.email]['projects'][self.project_name][self.subject_name]['session' +
+                                                                                    str(session_number)]['tasks']['fail']
+        if check_task =="":
+                self.data[user.email]['projects'][self.project_name][self.subject_name]['session' +
+                                                                                        str(session_number)]['tasks']['fail'] = [self.unfinished_task]
+        else:
+                self.data[user.email]['projects'][self.project_name][self.subject_name]['session' +
+                                                                                        str(session_number)]['tasks']['fail'].append(self.unfinished_task)
         self.data[user.email]['projects'][self.project_name][self.subject_name]['session' +
-                                                                                str(session_number)]['tasks'][unfinished_task] = "Fail"
+                                                                                str(session_number)]['tasks']['success'].remove(self.unfinished_task)
         self.data.update()
         write_file(self.data)
 
